@@ -6,6 +6,7 @@
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="tailwind.config.js"></script>
+    <link rel="stylesheet" href="<?=WEBROOT?>/css/list.css">
 </head>
 <body>
     
@@ -51,8 +52,11 @@
             </div>
             
             <div>
-                <button type="submit" name="btnSave"  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ADD</button>
+                
                 <input  value="save-article" name="action" type="hidden" >
+                <input  value="article" name="controller" type="hidden" >
+                <button type="submit" name="btnSave"  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ADD</button>
+                
             </div>
         
         </form>

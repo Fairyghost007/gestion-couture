@@ -2,37 +2,42 @@
 require_once("../model/type.model.php");
 
 if(isset($_REQUEST['action'])){
-    if($_REQUEST['action']=="liste-article"){
-        listerArticle();
-    }elseif($_REQUEST['action']=="form-article"){
-        chargerFormulaire();
-    }elseif($_REQUEST['action']=="save-article"){
-        // chargerFormulaire();
-        var_dump($_REQUEST);
+    if($_REQUEST['action']=="liste-type"){
+        listerType();
+    }elseif($_REQUEST['action']=="form-type"){
+        chargerFormulaireType();
+    }elseif($_REQUEST['action']=="save-type" && $_REQUEST['controller']=="type"){
+        
         unset($_REQUEST['action']);
-        unset($_REQUEST['btnSave']);
-        store($_REQUEST);
-        header("location:",WEBROOT,"?action=liste-article");
+        unset($_REQUEST['btnSaveType']);
+        array_pop($_REQUEST);
+        storeType($_REQUEST);
+        header("Location: " . WEBROOT . "/?controller=type&action=liste-type");
+        exit();
     }
 
 }else{
-    listerArticle();
+    listerType();
 }
     
     
     function listerType():void{
         
-        $articles=findAllType();
-        require_once("../views/types/liste.html.php");
-    }
-
-    function chargerFormulaire():void{
-        $categories=findAllCategorie();
         $types=findAllType();
-        require_once("../views/articles/form.html.php");
+        require_once("../views/type/liste.html.php");
     }
 
-    function store(array $type):void{
-        save($type);
+    function chargerFormulaireType():void{
+        require_once("../views/type/form.html.php");
+    }
+
+    function storeType(array $type):void{
+        saveType($type);
+       
         
+    }
+
+    function getArticleById(int $id){
+        
+
     }

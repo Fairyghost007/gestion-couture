@@ -1,23 +1,22 @@
 <?php
 define("WEBROOT","http://localhost:8010");
+ob_start();
 require_once("../views/sidebar.html.php");
 require_once("../views/navbar.html.php");
-require_once("../controllers/article.controller.php");
+
+
+if(isset($_REQUEST['controller'])){
+    if($_REQUEST['controller']=="article"){
+        require_once("../controllers/article.controller.php");
+    }elseif($_REQUEST['controller']=="type"){
+        require_once("../controllers/type.controller.php");
+    }elseif($_REQUEST['controller']=="categorie"){
+        require_once("../controllers/categorie.controller.php");
+    }
+
+}else{
+    require_once("../controllers/article.controller.php");
+}
+ob_end_flush();
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-
-        
-  </div>
-</nav>
-
-</body>
-</html>
 
