@@ -3,7 +3,12 @@ require_once("../model/type.model.php");
 
 if (isset($_REQUEST['action'])) {
     if ($_REQUEST['action'] == "liste-type") {
-        listerType();
+        unset($_REQUEST['action']);
+        unset($_REQUEST['controller']);
+        $page= $_REQUEST['page'];
+        $debut=nbElementBypage*($_REQUEST['page']-1);
+        listerType($debut,$page);
+        
     } elseif ($_REQUEST['action'] == "form-type") {
         chargerFormulaireType();
     } elseif ($_REQUEST['action'] == "save-type") {
@@ -12,14 +17,14 @@ if (isset($_REQUEST['action'])) {
         unset($_REQUEST['btnSaveType']);
         array_pop($_REQUEST);
         storeType($_REQUEST);
-        header("Location: " . WEBROOT . "/?controller=type&action=liste-type");
+        header("Location: " . WEBROOT . "/?controller=type&action=liste-type&page=1");
         exit();
     } elseif ($_REQUEST['action'] == "deleteType") {
         unset($_REQUEST['action']);
         unset($_REQUEST['controller']);
         var_dump($_REQUEST['id']);
         removeType($_REQUEST['id']);
-        header("Location: " . WEBROOT . "/?controller=type&action=liste-type");
+        header("Location: " . WEBROOT . "/?controller=type&action=liste-type&page=1");
         exit();
     } elseif ($_REQUEST['action'] == "updateType") {
         unset($_REQUEST['action']);
@@ -34,19 +39,20 @@ if (isset($_REQUEST['action'])) {
         unset($_REQUEST['btnUpdateType']);
         var_dump($_REQUEST);
         modifierType($_REQUEST['id'], $_REQUEST);
-        header("Location: " . WEBROOT . "/?controller=type&action=liste-type");
+        header("Location: " . WEBROOT . "/?controller=type&action=liste-type&page=1");
         exit();
     }
 } else {
-    listerType();
+    listerType(0,1);
 }
 
 
-function listerType(): void
-{
-    $types = findAllType();
+function listerType(int $debut,$page): void{
+
+    $types = findAllType($debut, nbElementBypage);
     require_once("../views/type/liste.html.php");
 }
+
 
 function chargerFormulaireType(): void
 {
@@ -80,4 +86,19 @@ function modifierType(int $id, array $type): void
 function getTypeById(int $id): ?array
 {
     return findTypeById($id);
+}
+
+
+
+///////////////////////////////////////
+
+function nbrType():int{
+    return getNbrType();
+}
+
+function numberofpageType():int{
+    // var_dump(nbrArticle());
+    // var_dump(ceil(nbrArticle()/$nbArticleByPage));
+    return $nbrPage=ceil(nbrType()/nbElementBypage);
+
 }

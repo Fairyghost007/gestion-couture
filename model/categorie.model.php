@@ -1,26 +1,32 @@
 <?php
 
-function findAllCategorie(): array {
+function findAllCategorie(int $debut = 0, int $nbCategorieByPage = 5): array
+{
     $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
     $username = 'root';
     $password = 'root';
-    
+
     try {
         $dbh = new PDO($dsn, $username, $password);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        $sql = "SELECT c.id, c.nomCategorie 
+
+        $sql = "SELECT c.id, c.nomCategorie
                 FROM categorie c
-                ORDER BY c.id"; // Order by category id or any other desired column
-        
-        $stmt = $dbh->query($sql);
+                ORDER BY c.id
+                LIMIT :debut, :nbCategorieByPage";
+
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':debut', $debut, PDO::PARAM_INT);
+        $stmt->bindParam(':nbCategorieByPage', $nbCategorieByPage, PDO::PARAM_INT);
+        $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
     } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
+        error_log("Connection failed: " . $e->getMessage());
         return [];
     }
 }
+
 
 
 
@@ -83,6 +89,7 @@ function deleteCategorie(int $id): bool {
 
 
 
+
 function updateCategorie(int $id, array $categorie): bool {
     $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
     $username = 'root';
@@ -102,5 +109,29 @@ function updateCategorie(int $id, array $categorie): bool {
     } catch (PDOException $e) {
         echo "Connection failed: " . $e->getMessage();
         return false;
+    }
+}
+
+
+function getNbrCategorie(): int
+{
+    $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
+    $username = 'root';
+    $password = 'root';
+
+    try {
+        $dbh = new PDO($dsn, $username, $password);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        $sql = "SELECT COUNT(id) as nbrCategories FROM categorie";
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['nbrCategories'];
+    } catch (PDOException $e) {
+        error_log("Error fetching category count: " . $e->getMessage());
+        return 0;
     }
 }

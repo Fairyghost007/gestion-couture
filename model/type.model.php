@@ -1,26 +1,32 @@
 <?php
 
-function findAllType(): array {
+function findAllType(int $debut=0, int $nbTypeByPage=5): array
+{
     $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
     $username = 'root';
     $password = 'root';
-    
+
     try {
         $dbh = new PDO($dsn, $username, $password);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        $sql = "SELECT t.id, t.nomType 
+
+        $sql = "SELECT t.id, t.nomType
                 FROM type t
-                ORDER BY t.id"; // Order by type id or any other desired column
-        
-        $stmt = $dbh->query($sql);
+                ORDER BY t.id
+                LIMIT :debut, :nbTypeByPage";
+
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':debut', $debut, PDO::PARAM_INT);
+        $stmt->bindParam(':nbTypeByPage', $nbTypeByPage, PDO::PARAM_INT);
+        $stmt->execute();
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
     } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
+        error_log("Connection failed: " . $e->getMessage());
         return [];
     }
 }
+
 
 
 
@@ -109,4 +115,33 @@ function updateType(int $id, array $type): bool {
         return false;
     }
 }
+
+
+function getNbrType(): int
+{
+    $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
+    $username = 'root';
+    $password = 'root';
+
+    try {
+        $dbh = new PDO($dsn, $username, $password);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        $sql = "SELECT COUNT(id) as nbrTypes FROM type";
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute();
+        
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['nbrTypes'];
+    } catch (PDOException $e) {
+        error_log("Error fetching type count: " . $e->getMessage());
+        return 0;
+    }
+}
+
+
+
+
+
 

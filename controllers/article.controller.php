@@ -5,7 +5,11 @@ require_once("../model/type.model.php");
 
 if (isset($_REQUEST['action'])) {
     if ($_REQUEST['action'] == "liste-article") {
-        listerArticle();
+        unset($_REQUEST['action']);
+        unset($_REQUEST['controller']);
+        $page= $_REQUEST['page'];
+        $debut=nbElementBypage*($_REQUEST['page']-1);
+        listerArticle($debut,$page);
     } elseif ($_REQUEST['action'] == "form-article") {
         chargerFormulaireArticle();
     } elseif ($_REQUEST['action'] == "save-article") {
@@ -13,13 +17,13 @@ if (isset($_REQUEST['action'])) {
         unset($_REQUEST['action']);
         unset($_REQUEST['btnSave']);
         storeArticle($_REQUEST);
-        header("location:" . WEBROOT . "/?controller=article&action=liste-article");
+        header("location:" . WEBROOT . "/?controller=article&action=liste-article&page=1");
         exit();
     } elseif ($_REQUEST['action'] == "delete") {
         unset($_REQUEST['action']);
         var_dump($_REQUEST['id']);
         removeArticle($_REQUEST['id']);
-        header("location:" . WEBROOT . "/?controller=article&action=liste-article");
+        header("location:" . WEBROOT . "/?controller=article&action=liste-article&page=1");
         exit();
     } elseif ($_REQUEST['action'] == "update") {
         unset($_REQUEST['action']);
@@ -32,18 +36,16 @@ if (isset($_REQUEST['action'])) {
         var_dump($_REQUEST['id']);
         var_dump($_REQUEST);
         modifierArticle($_REQUEST['id'], $_REQUEST);
-        header("location:" . WEBROOT . "/?controller=article&action=liste-article");
+        header("location:" . WEBROOT . "/?controller=article&action=liste-article&page=1");
         exit();
     }
 } else {
-    listerArticle();
+    listerArticle(0,1);
 }
 
-
-function listerArticle(): void
+function listerArticle($debut,$page): void
 {
-
-    $articles = findAll();
+    $articles = findAll( $debut,nbElementBypage);
     require_once("../views/articles/liste.html.php");
 }
 
@@ -56,7 +58,7 @@ function chargerFormulaireArticle(): void
 function chargerFormulaireUpdateArticle(int $id): void
 {
     $article = getArticleById($id);
-    var_dump($article);
+    // var_dump($article);
     $categories = findAllCategorie();
     $types = findAllType();
     require_once("../views/articles/update.form.html.php");
@@ -81,5 +83,18 @@ function removeArticle(int $id): void
 function modifierArticle(int $id, array $article): void
 {
     updateArticle($id, $article);
+
+}
+
+///////////////////////////////////////
+
+function nbrArticle():int{
+    return getNbrArticle();
+}
+
+function numberofpageArticle():int{
+    // var_dump(nbrArticle());
+    // var_dump(ceil(nbrArticle()/$nbArticleByPage));
+    return $nbrPage=ceil(nbrArticle()/nbElementBypage);
 
 }
