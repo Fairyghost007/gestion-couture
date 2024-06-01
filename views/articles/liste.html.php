@@ -57,9 +57,8 @@
                                 <td class="px-6 py-4"><?= $article['nomCategorie']; ?></td>
                                 <td class="px-6 py-4"><?= $article['nomType']; ?></td>
                                 <td class="px-4 py-3 text-xs ">
-                                    <a href="#" class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-blue-100">Modifier</a>
+                                    <a href="<?= WEBROOT ?>/?action=update&id=<?=$article['id']?>"  class="px-2 py-1 font-semibold leading-tight text-blue-700 bg-blue-100 rounded-full dark:bg-blue-700 dark:text-blue-100">Modifier</a>
                                     <a href="<?= WEBROOT ?>/?action=delete&id=<?=$article['id']?>"  class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">Supprimer</a>
-                                    <!--<p> <?=$article['id']?></p> -->
                                 </td>
 
                             </tr>

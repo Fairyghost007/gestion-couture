@@ -1,21 +1,28 @@
 <?php
-    function findAll(): array{
+    function findAll(): array {
         $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
         $username = 'root';
         $password = 'root';
+        
         try {
             $dbh = new PDO($dsn, $username, $password);
-            $sql="SELECT  a.id, a.libelle, a.qteStock, a.prixAppro, c.nomCategorie, t.nomType  FROM `article` a, categorie c, type t WHERE a.`typeId`=t.id and a.categorieId=c.id;";
+            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            $sql = "SELECT a.id, a.libelle, a.qteStock, a.prixAppro, c.nomCategorie, t.nomType 
+                    FROM article a
+                    JOIN categorie c ON a.categorieId = c.id
+                    JOIN type t ON a.typeId = t.id
+                    ORDER BY a.id"; // Order by article id or any other desired column
+            
             $stmt = $dbh->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            // echo "<pre>";
-            //     var_dump($rows);
-            // echo "<pre>";
-            echo "connexion reussie";
+            
         } catch (PDOException $e) {
-            echo "connexion echouee" . $e->getMessage();
+            echo "Connection failed: " . $e->getMessage();
+            return [];
         }
-    };
+    }
+    
 
     function saveArticle(array $article):int{
         $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
@@ -39,16 +46,21 @@
     
         try {
             $dbh = new PDO($dsn, $username, $password);
-            $sql = "SELECT * FROM `article` WHERE `id` = id";
-            $stmt=$dbh ->query($sql);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC)?: null;
-        
+            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
+            $sql = "SELECT * FROM `article` WHERE `id` = :id";
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $article = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $article ?: null;
         } catch (PDOException $e) {
             echo "Connection failed: " . $e->getMessage();
             return null;
         }
     }
+    
 
 
 function deleteArticle(int $id): bool {
@@ -66,6 +78,38 @@ function deleteArticle(int $id): bool {
         return $stmt->execute();
     } catch (PDOException $e) {
         error_log("Deletion failed: " . $e->getMessage());
+        return false;
+    }
+}
+
+function updateArticle(int $id, array $article): bool {
+    $dsn = 'mysql:host=localhost:8889;dbname=cour_php_2024';
+    $username = 'root';
+    $password = 'root';
+    try {
+        $dbh = new PDO($dsn, $username, $password);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Extract array to variables
+        extract($article);
+
+        // Prepare the SQL statement with placeholders
+        $sql = "UPDATE article 
+                SET libelle = :libelle, qteStock = :qteStock, prixAppro = :prixAppro, typeId = :typeId, categorieId = :categorieId
+                WHERE id = :id";
+
+        // Prepare and execute the statement
+        $stmt = $dbh->prepare($sql);
+        return $stmt->execute([
+            ':libelle' => $libelle,
+            ':qteStock' => $qteStock,
+            ':prixAppro' => $prixAppro,
+            ':typeId' => $typeId,
+            ':categorieId' => $categorieId,
+            ':id' => $id
+        ]);
+    } catch (PDOException $e) {
+        error_log("Update failed: " . $e->getMessage());
         return false;
     }
 }

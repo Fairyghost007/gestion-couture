@@ -15,10 +15,23 @@ if (isset($_REQUEST['action'])) {
         storeArticle($_REQUEST);
         header("location:" . WEBROOT . "/?controller=article&action=liste-article");
         exit();
-    }elseif ($_REQUEST['action'] == "delete") {
+    } elseif ($_REQUEST['action'] == "delete") {
         unset($_REQUEST['action']);
         var_dump($_REQUEST['id']);
         removeArticle($_REQUEST['id']);
+        header("location:" . WEBROOT . "/?controller=article&action=liste-article");
+        exit();
+    } elseif ($_REQUEST['action'] == "update") {
+        unset($_REQUEST['action']);
+        var_dump($_REQUEST['id']);
+        chargerFormulaireUpdateArticle($_REQUEST['id']);
+        exit();
+    } elseif ($_REQUEST['action'] == "modifier") {
+        unset($_REQUEST['action']);
+        unset($_REQUEST['btnUpdateArticle']);
+        var_dump($_REQUEST['id']);
+        var_dump($_REQUEST);
+        modifierArticle($_REQUEST['id'], $_REQUEST);
         header("location:" . WEBROOT . "/?controller=article&action=liste-article");
         exit();
     }
@@ -40,16 +53,33 @@ function chargerFormulaireArticle(): void
     $types = findAllType();
     require_once("../views/articles/form.html.php");
 }
+function chargerFormulaireUpdateArticle(int $id): void
+{
+    $article = getArticleById($id);
+    var_dump($article);
+    $categories = findAllCategorie();
+    $types = findAllType();
+    require_once("../views/articles/update.form.html.php");
+}
 
 function storeArticle(array $article): void
 {
     saveArticle($article);
 }
 
-function getArticleById(int $id):?array{
+function getArticleById(int $id): ?array
+{
     return findArticleById($id);
 }
 
-function removeArticle(int $id):void{
+function removeArticle(int $id): void
+{
     deleteArticle($id);
+}
+
+
+function modifierArticle(int $id, array $article): void
+{
+    updateArticle($id, $article);
+
 }
