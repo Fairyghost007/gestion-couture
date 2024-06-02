@@ -1,3 +1,7 @@
+<?php
+require_once("../controllers/type.controller.php");
+$typeController = new TypeController();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -54,7 +58,7 @@
                 </table>
             </div>
         </div>
-        <?php if (numberofpageType() > 1) : ?>
+        <?php if ($typeController->numberofpageType() > 1) : ?>
             <div>
                 <nav aria-label="Page navigation example">
                     <ul class="inline-flex -space-x-px text-base h-10">
@@ -65,7 +69,7 @@
                                 <span class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">Previous</span>
                             <?php endif; ?>
                         </li>
-                        <?php for ($i = 1; $i <= numberofpageType(); $i++) : ?>
+                        <?php for ($i = 1; $i <= $typeController->numberofpageType(); $i++) : ?>
                             <?php if ($page != $i) : ?>
                                 <li><a href="<?= WEBROOT ?>/?controller=type&action=liste-type&page=<?= $i ?>" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i ?></a></li>
                             <?php else : ?>
@@ -73,7 +77,7 @@
                             <?php endif; ?>
                         <?php endfor; ?>
                         <li>
-                            <?php if ($page < numberofpageType()) : ?>
+                            <?php if ($page < $typeController->numberofpageType()) : ?>
                                 <a href="<?= WEBROOT ?>/?controller=type&action=liste-type&page=<?= ($page + 1) ?>" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
                             <?php else : ?>
                                 <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">Next</span>

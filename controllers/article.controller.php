@@ -2,99 +2,104 @@
 require_once("../model/article.model.php");
 require_once("../model/categorie.model.php");
 require_once("../model/type.model.php");
+require_once("../core/controller.php");
 
-if (isset($_REQUEST['action'])) {
-    if ($_REQUEST['action'] == "liste-article") {
-        unset($_REQUEST['action']);
-        unset($_REQUEST['controller']);
-        $page= $_REQUEST['page'];
-        $debut=nbElementBypage*($_REQUEST['page']-1);
-        listerArticle($debut,$page);
-    } elseif ($_REQUEST['action'] == "form-article") {
-        chargerFormulaireArticle();
-    } elseif ($_REQUEST['action'] == "save-article") {
-        var_dump($_REQUEST);
-        unset($_REQUEST['action']);
-        unset($_REQUEST['btnSave']);
-        storeArticle($_REQUEST);
-        header("location:" . WEBROOT . "/?controller=article&action=liste-article&page=1");
-        exit();
-    } elseif ($_REQUEST['action'] == "delete") {
-        unset($_REQUEST['action']);
-        var_dump($_REQUEST['id']);
-        removeArticle($_REQUEST['id']);
-        header("location:" . WEBROOT . "/?controller=article&action=liste-article&page=1");
-        exit();
-    } elseif ($_REQUEST['action'] == "update") {
-        unset($_REQUEST['action']);
-        var_dump($_REQUEST['id']);
-        chargerFormulaireUpdateArticle($_REQUEST['id']);
-        exit();
-    } elseif ($_REQUEST['action'] == "modifier") {
-        unset($_REQUEST['action']);
-        unset($_REQUEST['btnUpdateArticle']);
-        var_dump($_REQUEST['id']);
-        var_dump($_REQUEST);
-        modifierArticle($_REQUEST['id'], $_REQUEST);
-        header("location:" . WEBROOT . "/?controller=article&action=liste-article&page=1");
-        exit();
+class ArticleController extends Controller {
+    private ArticleModel $articleModel;
+    private CategorieModel $categorieModel;
+    private TypeModel $typeModel;
+
+    public function __construct() {
+        $this->articleModel = new ArticleModel();
+        $this->categorieModel = new CategorieModel();
+        $this->typeModel = new TypeModel();
+        $this->load();
     }
-} else {
-    listerArticle(0,1);
+
+    public function load(): void {
+        if (isset($_REQUEST['action'])) {
+            if ($_REQUEST['action'] == "liste-article") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['controller']);
+                $page = $_REQUEST['page'];
+                $debut = nbElementBypage * ($_REQUEST['page'] - 1);
+                $this->listerArticle($debut, $page);
+            } elseif ($_REQUEST['action'] == "form-article") {
+                $this->chargerFormulaireArticle();
+            } elseif ($_REQUEST['action'] == "save-article") {
+                var_dump($_REQUEST);
+                unset($_REQUEST['action']);
+                unset($_REQUEST['btnSave']);
+                $this->storeArticle($_REQUEST);
+                $this->redirectToRoute("controller=article&action=liste-article&page=1");
+                exit();
+            } elseif ($_REQUEST['action'] == "delete") {
+                unset($_REQUEST['action']);
+                var_dump($_REQUEST['id']);
+                $this->removeArticle($_REQUEST['id']);
+                $this->redirectToRoute("controller=article&action=liste-article&page=1");
+                exit();
+            } elseif ($_REQUEST['action'] == "update") {
+                unset($_REQUEST['action']);
+                var_dump($_REQUEST['id']);
+                $this->chargerFormulaireUpdateArticle($_REQUEST['id']);
+                exit();
+            } elseif ($_REQUEST['action'] == "modifier") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['btnUpdateArticle']);
+                var_dump($_REQUEST['id']);
+                var_dump($_REQUEST);
+                $this->modifierArticle($_REQUEST['id'], $_REQUEST);
+                $this->redirectToRoute("controller=article&action=liste-article&page=1");
+                exit();
+            }
+        } else {
+            $this->listerArticle(0, 1);
+        }
+    }
+
+    public function listerArticle($debut, $page): void {
+        $articles = $this->articleModel->findAll($debut, nbElementBypage);
+        $this->renderView("articles/liste", ['articles' => $articles, 'page' => $page]);
+    }
+
+    public function chargerFormulaireArticle(): void {
+        $categories = $this->categorieModel->findAllCategorie();
+        $types = $this->typeModel->findAllType();
+        $this->renderView("articles/form", ['categories' => $categories, 'types' => $types]);
+    }
+
+    public function chargerFormulaireUpdateArticle(int $id): void {
+        $article = $this->articleModel->findArticleById($id);
+        $categories = $this->categorieModel->findAllCategorie();
+        $types = $this->typeModel->findAllType();
+        $this->renderView("articles/update.form", ['article' => $article, 'categories' => $categories, 'types' => $types]);
+    }
+
+    public function storeArticle(array $article): void {
+        $this->articleModel->saveArticle($article);
+    }
+
+    public function getArticleById(int $id): ?array {
+        return $this->articleModel->findArticleById($id);
+    }
+
+    public function removeArticle(int $id): void {
+        $this->articleModel->deleteArticle($id);
+    }
+
+    public function modifierArticle(int $id, array $article): void {
+        $this->articleModel->updateArticle($id, $article);
+    }
+
+    public function nbrArticle(): int {
+        return $this->articleModel->getNbrArticle();
+    }
+
+    public function numberofpageArticle(): int {
+        return ceil($this->nbrArticle() / nbElementBypage);
+    }
 }
 
-function listerArticle($debut,$page): void
-{
-    $articles = findAll( $debut,nbElementBypage);
-    require_once("../views/articles/liste.html.php");
-}
-
-function chargerFormulaireArticle(): void
-{
-    $categories = findAllCategorie();
-    $types = findAllType();
-    require_once("../views/articles/form.html.php");
-}
-function chargerFormulaireUpdateArticle(int $id): void
-{
-    $article = getArticleById($id);
-    // var_dump($article);
-    $categories = findAllCategorie();
-    $types = findAllType();
-    require_once("../views/articles/update.form.html.php");
-}
-
-function storeArticle(array $article): void
-{
-    saveArticle($article);
-}
-
-function getArticleById(int $id): ?array
-{
-    return findArticleById($id);
-}
-
-function removeArticle(int $id): void
-{
-    deleteArticle($id);
-}
-
-
-function modifierArticle(int $id, array $article): void
-{
-    updateArticle($id, $article);
-
-}
-
-///////////////////////////////////////
-
-function nbrArticle():int{
-    return getNbrArticle();
-}
-
-function numberofpageArticle():int{
-    // var_dump(nbrArticle());
-    // var_dump(ceil(nbrArticle()/$nbArticleByPage));
-    return $nbrPage=ceil(nbrArticle()/nbElementBypage);
-
-}
+// $articleController = new ArticleController();
+?>

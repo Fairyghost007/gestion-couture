@@ -1,93 +1,90 @@
 <?php
 require_once("../model/categorie.model.php");
+require_once("../core/controller.php");
 
-if(isset($_REQUEST['action'])){
-    if($_REQUEST['action']=="liste-categorie"){
-        unset($_REQUEST['action']);
-        unset($_REQUEST['controller']);
-        $page= $_REQUEST['page'];
-        $debut=nbElementBypage*($_REQUEST['page']-1);
-        listerCategorie($debut,$page);
-    }elseif($_REQUEST['action']=="form-categorie"){
-        chargerFormulaireCategorie();
-    }elseif($_REQUEST['action']=="save-categorie"){
-        unset($_REQUEST['action']);
-        unset($_REQUEST['btnSaveCategorie']);
-        var_dump($_REQUEST);
-        storeCategorie($_REQUEST);
-        header("location:".WEBROOT."/?controller=categorie&action=liste-categorie&page=1");
-    }elseif($_REQUEST['action']=="deleteCategorie"){
-        unset($_REQUEST['action']);
-        unset($_REQUEST['controller']);
-        removeCategorie($_REQUEST['id']);
-        header("location:".WEBROOT."/?controller=categorie&action=liste-categorie&page=1");
-        exit();
-    } elseif($_REQUEST['action']=="updateCategorie"){
-        unset($_REQUEST['action']);
-        unset($_REQUEST['controller']);
-        chargerFormulaireUpdateCategorie($_REQUEST['id']);
-        exit();
-    } elseif($_REQUEST['action']=="modifier-categorie"){
-        var_dump($_REQUEST);
-        unset($_REQUEST['action']);
-        unset($_REQUEST['controller']);
-        unset($_REQUEST['btnUpdateCategorie']);
-        var_dump($_REQUEST);
-        modifierCategorie($_REQUEST['id'], $_REQUEST);
-        header("location:".WEBROOT."/?controller=categorie&action=liste-categorie&page=1");
-        exit();
+class CategorieController extends Controller {
+    private CategorieModel $categorieModel;
+
+    public function __construct() {
+        $this->categorieModel = new CategorieModel();
+        $this->load();
     }
 
-}else{
-    listerCategorie(0,1);
+    public function load(): void {
+        if (isset($_REQUEST['action'])) {
+            if ($_REQUEST['action'] == "liste-categorie") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['controller']);
+                $page = $_REQUEST['page'];
+                $debut = nbElementBypage * ($_REQUEST['page'] - 1);
+                $this->listerCategorie($debut, $page);
+            } elseif ($_REQUEST['action'] == "form-categorie") {
+                $this->chargerFormulaireCategorie();
+            } elseif ($_REQUEST['action'] == "save-categorie") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['btnSaveCategorie']);
+                array_pop($_REQUEST);
+                $this->storeCategorie($_REQUEST);
+                $this->redirectToRoute("controller=categorie&action=liste-categorie&page=1");
+                exit();
+            } elseif ($_REQUEST['action'] == "deleteCategorie") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['controller']);
+                $this->removeCategorie($_REQUEST['id']);
+                $this->redirectToRoute("controller=categorie&action=liste-categorie&page=1");
+                exit();
+            } elseif ($_REQUEST['action'] == "updateCategorie") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['controller']);
+                $this->chargerFormulaireUpdateCategorie($_REQUEST['id']);
+                exit();
+            } elseif ($_REQUEST['action'] == "modifier-categorie") {
+                unset($_REQUEST['action']);
+                unset($_REQUEST['controller']);
+                unset($_REQUEST['btnUpdateCategorie']);
+                $this->modifierCategorie($_REQUEST['id'], $_REQUEST);
+                $this->redirectToRoute("controller=categorie&action=liste-categorie&page=1");
+                exit();
+            }
+        } else {
+            $this->listerCategorie(0, 1);
+        }
+    }
+
+    public function listerCategorie(int $debut, int $page): void {
+        $categories = $this->categorieModel->findAllCategorie($debut, nbElementBypage);
+        $this->renderView("categories/liste", ['categories' => $categories, 'page' => $page]);
+    }
+
+    public function chargerFormulaireCategorie(): void {
+        $this->renderView("categories/form");
+    }
+
+    public function chargerFormulaireUpdateCategorie(int $id): void {
+        $categorie = $this->categorieModel->findCategorieById($id);
+        $this->renderView("categories/update.form", ['categorie' => $categorie]);
+    }
+
+    public function storeCategorie(array $categorie): void {
+        $this->categorieModel->saveCategorie($categorie);
+    }
+
+    public function removeCategorie(int $id): void {
+        $this->categorieModel->deleteCategorie($id);
+    }
+
+    public function modifierCategorie(int $id, array $categorie): void {
+        $this->categorieModel->updateCategorie($id, $categorie);
+    }
+
+    public function nbrCategorie(): int {
+        return $this->categorieModel->getNbrCategorie();
+    }
+
+    public function numberOfPageCategorie(): int {
+        return ceil($this->nbrCategorie() / nbElementBypage);
+    }
 }
-    
-    
-function listerCategorie(int $debut,$page): void {
-    $categories = findAllCategorie($debut, nbElementBypage);
-    require_once("../views/categories/liste.html.php");
-}
-
-function chargerFormulaireCategorie(): void {
-    require_once("../views/categories/form.html.php");
-}
-
-function chargerFormulaireUpdateCategorie(int $id): void {
-    $categorie = getCategorieById($id);
-    require_once("../views/categories/update.form.html.php");
-}
-
-function storeCategorie(array $categorie): void {
-    saveCategorie($categorie);
-}
-
-function getCategorieById(int $id): ?array
-{
-    return findCategorieById($id);
-}
-
-function removeCategorie(int $id): void
-{
-    deleteCategorie($id);
-}
-
-function modifierCategorie(int $id, array $categorie): void
-{
-    updateCategorie($id, $categorie);
-
-}
 
 
-
-///////////////////////////////////////
-
-function nbrCategorie():int{
-    return getNbrCategorie();
-}
-
-function numberofpageCategorie():int{
-    // var_dump(nbrArticle());
-    // var_dump(ceil(nbrArticle()/$nbArticleByPage));
-    return $nbrPage=ceil(nbrCategorie()/nbElementBypage);
-
-}
+?>

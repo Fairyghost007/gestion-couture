@@ -1,3 +1,7 @@
+<?php
+require_once("../controllers/categorie.controller.php");
+$categorieController = new CategorieController();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -55,7 +59,7 @@
             </div>
         </div>
 
-        <?php if (numberofpageCategorie() > 1) : ?>
+        <?php if ($categorieController->numberofpageCategorie() > 1) : ?>
 
             <div>
                 <nav aria-label="Page navigation example">
@@ -67,7 +71,7 @@
                                 <span class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">Previous</span>
                             <?php endif; ?>
                         </li>
-                        <?php for ($i = 1; $i <= numberofpageCategorie(); $i++) : ?>
+                        <?php for ($i = 1; $i <= $categorieController->numberofpageCategorie(); $i++) : ?>
                             <?php if ($page != $i) : ?>
                                 <li><a href="<?= WEBROOT ?>/?controller=categorie&action=liste-categorie&page=<?= $i ?>" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><?= $i ?></a></li>
                             <?php else : ?>
@@ -75,7 +79,11 @@
                             <?php endif; ?>
                         <?php endfor; ?>
                         <li>
-                            <a href="<?= WEBROOT ?>/?controller=categorie&action=liste-categorie&page=<?= ($page + 1) ?>" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                            <?php if ($page <  $categorieController->numberofpageCategorie()) : ?>
+                                <a href="<?= WEBROOT ?>/?controller=categorie&action=liste-categorie&page=<?= ($page + 1) ?>" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                            <?php else : ?>
+                                <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400">Next</span>
+                            <?php endif; ?>
                         </li>
                     </ul>
                 </nav>

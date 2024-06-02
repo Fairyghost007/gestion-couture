@@ -6,18 +6,12 @@ require_once("../views/sidebar.html.php");
 require_once("../views/navbar.html.php");
 
 
-if(isset($_REQUEST['controller'])){
-    if($_REQUEST['controller']=="article"){
-        require_once("../controllers/article.controller.php");
-    }elseif($_REQUEST['controller']=="type"){
-        require_once("../controllers/type.controller.php");
-    }elseif($_REQUEST['controller']=="categorie"){
-        require_once("../controllers/categorie.controller.php");
-    }
+//--------//ROUTEUR//---------//
 
-}else{
-    require_once("../controllers/article.controller.php");
-}
+require_once("../core/routeur.php");
+$routeur=new routeur;
+$routeur::run();
+
 ob_end_flush();
 ?>
 
