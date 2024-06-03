@@ -39,7 +39,7 @@ class ArticleModel
         }
     }
 
-    public function saveArticle(array $article): int
+    public function save(array $article): int
     {
         try {
             extract($article);
@@ -59,7 +59,7 @@ class ArticleModel
         }
     }
 
-    public function findArticleById(int $id): ?array
+    public function findElementById(int $id): ?array
     {
         try {
             $sql = "SELECT * FROM article WHERE id = :id";
@@ -75,7 +75,7 @@ class ArticleModel
         }
     }
 
-    public function deleteArticle(int $id): bool
+    public function delete(int $id): bool
     {
         try {
             $sql = "DELETE FROM article WHERE id = :id";
@@ -88,7 +88,7 @@ class ArticleModel
         }
     }
 
-    public function updateArticle(int $id, array $article): bool
+    public function update(int $id, array $article): bool
     {
         try {
             extract($article);
@@ -111,7 +111,7 @@ class ArticleModel
         }
     }
 
-    public function getNbrArticle(): int
+    public function getNbrOfElement(): int
     {
         try {
             $sql = "SELECT COUNT(id) as nbrArticles FROM article";

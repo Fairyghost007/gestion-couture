@@ -52,7 +52,7 @@ class TypeController extends Controller {
     }
 
     public function listerType(int $debut, int $page): void {
-        $types = $this->typeModel->findAllType($debut, nbElementBypage);
+        $types = $this->typeModel->findAll($debut, nbElementBypage);
         $this->renderView("type/liste", ['types' => $types, 'page' => $page]);
     }
 
@@ -61,24 +61,24 @@ class TypeController extends Controller {
     }
 
     public function chargerFormulaireUpdateType(int $id): void {
-        $type = $this->typeModel->findTypeById($id);
+        $type = $this->typeModel->findElementById($id);
         $this->renderView("type/update.form", ['type' => $type]);
     }
 
     public function storeType(array $type): void {
-        $this->typeModel->saveType($type);
+        $this->typeModel->save($type);
     }
 
     public function removeType(int $id): void {
-        $this->typeModel->deleteType($id);
+        $this->typeModel->delete($id);
     }
 
     public function modifierType(int $id, array $type): void {
-        $this->typeModel->updateType($id, $type);
+        $this->typeModel->update($id, $type);
     }
 
     public function nbrType(): int {
-        return $this->typeModel->getNbrType();
+        return $this->typeModel->getNbrOfElement();
     }
 
     public function numberOfPageType(): int {

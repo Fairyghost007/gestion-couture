@@ -7,17 +7,17 @@ class routeur
         if (isset($_REQUEST['controller'])) {
             if ($_REQUEST['controller'] == "article") {
                 require_once("../controllers/article.controller.php");
-                new ArticleController();
+                $articleController =new ArticleController();
             } elseif ($_REQUEST['controller'] == "type") {
                 require_once("../controllers/type.controller.php");
-                new TypeController();
+                $tyoeController =new TypeController();
             } elseif ($_REQUEST['controller'] == "categorie") {
                 require_once("../controllers/categorie.controller.php");
-                new CategorieController();
+                $categorieController =new CategorieController();
             }
         } else {
             require_once("../controllers/article.controller.php");
-            new ArticleController();
+            $articleController =new ArticleController();
         }
     }
 }

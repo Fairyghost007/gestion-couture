@@ -18,7 +18,7 @@ class CategorieModel
         }
     }
 
-    public function findAllCategorie(int $debut = 0, int $nbCategorieByPage = 5): array
+    public function findAll(int $debut = 0, int $nbCategorieByPage = 5): array
     {
         try {
             $sql = "SELECT c.id, c.nomCategorie
@@ -38,7 +38,7 @@ class CategorieModel
         }
     }
 
-    public function saveCategorie(array $categorie): int
+    public function save(array $categorie): int
     {
         try {
             $sql = "INSERT INTO `categorie` (`nomCategorie`) VALUES (:nomCategorie)";
@@ -53,7 +53,7 @@ class CategorieModel
         }
     }
 
-    public function findCategorieById(int $id): ?array
+    public function findElementById(int $id): ?array
     {
         try {
             $sql = "SELECT * FROM `categorie` WHERE `id` = :id";
@@ -68,7 +68,7 @@ class CategorieModel
         }
     }
 
-    public function deleteCategorie(int $id): bool
+    public function delete(int $id): bool
     {
         try {
             $sql = "DELETE FROM categorie WHERE id = :id";
@@ -82,7 +82,7 @@ class CategorieModel
         }
     }
 
-    public function updateCategorie(int $id, array $categorie): bool
+    public function update(int $id, array $categorie): bool
     {
         try {
             $sql = "UPDATE `categorie` SET `nomCategorie` = :nomCategorie WHERE `id` = :id";
@@ -97,7 +97,7 @@ class CategorieModel
         }
     }
 
-    public function getNbrCategorie(): int
+    public function getNbrOfElement(): int
     {
         try {
             $sql = "SELECT COUNT(id) as nbrCategories FROM categorie";

@@ -52,7 +52,7 @@ class CategorieController extends Controller {
     }
 
     public function listerCategorie(int $debut, int $page): void {
-        $categories = $this->categorieModel->findAllCategorie($debut, nbElementBypage);
+        $categories = $this->categorieModel->findAll($debut, nbElementBypage);
         $this->renderView("categories/liste", ['categories' => $categories, 'page' => $page]);
     }
 
@@ -61,24 +61,24 @@ class CategorieController extends Controller {
     }
 
     public function chargerFormulaireUpdateCategorie(int $id): void {
-        $categorie = $this->categorieModel->findCategorieById($id);
+        $categorie = $this->categorieModel->findElementById($id);
         $this->renderView("categories/update.form", ['categorie' => $categorie]);
     }
 
     public function storeCategorie(array $categorie): void {
-        $this->categorieModel->saveCategorie($categorie);
+        $this->categorieModel->save($categorie);
     }
 
     public function removeCategorie(int $id): void {
-        $this->categorieModel->deleteCategorie($id);
+        $this->categorieModel->delete($id);
     }
 
     public function modifierCategorie(int $id, array $categorie): void {
-        $this->categorieModel->updateCategorie($id, $categorie);
+        $this->categorieModel->update($id, $categorie);
     }
 
     public function nbrCategorie(): int {
-        return $this->categorieModel->getNbrCategorie();
+        return $this->categorieModel->getNbrOfElement();
     }
 
     public function numberOfPageCategorie(): int {

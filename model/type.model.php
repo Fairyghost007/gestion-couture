@@ -18,7 +18,7 @@ class TypeModel
         }
     }
 
-    public function findAllType(int $debut = 0, int $nbTypeByPage = 5): array
+    public function findAll(int $debut = 0, int $nbTypeByPage = 5): array
     {
         try {
             $sql = "SELECT t.id, t.nomType
@@ -38,7 +38,7 @@ class TypeModel
         }
     }
 
-    public function saveType(array $type): int
+    public function save(array $type): int
     {
         try {
             $sql = "INSERT INTO `type` (`nomType`) VALUES (:nomType)";
@@ -53,7 +53,7 @@ class TypeModel
         }
     }
 
-    public function findTypeById(int $id): ?array
+    public function findElementById(int $id): ?array
     {
         try {
             $sql = "SELECT * FROM `type` WHERE `id` = :id";
@@ -68,7 +68,7 @@ class TypeModel
         }
     }
 
-    public function deleteType(int $id): bool
+    public function delete(int $id): bool
     {
         try {
             $sql = "DELETE FROM type WHERE id = :id";
@@ -83,7 +83,7 @@ class TypeModel
         }
     }
 
-    public function updateType(int $id, array $type): bool
+    public function update(int $id, array $type): bool
     {
         try {
             $sql = "UPDATE `type` SET `nomType` = :nomType WHERE `id` = :id";
@@ -98,7 +98,7 @@ class TypeModel
         }
     }
 
-    public function getNbrType(): int
+    public function getNbrOfElement(): int
     {
         try {
             $sql = "SELECT COUNT(id) as nbrTypes FROM type";

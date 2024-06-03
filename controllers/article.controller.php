@@ -64,36 +64,36 @@ class ArticleController extends Controller {
     }
 
     public function chargerFormulaireArticle(): void {
-        $categories = $this->categorieModel->findAllCategorie();
-        $types = $this->typeModel->findAllType();
+        $categories = $this->categorieModel->findAll();
+        $types = $this->typeModel->findAll();
         $this->renderView("articles/form", ['categories' => $categories, 'types' => $types]);
     }
 
     public function chargerFormulaireUpdateArticle(int $id): void {
-        $article = $this->articleModel->findArticleById($id);
-        $categories = $this->categorieModel->findAllCategorie();
-        $types = $this->typeModel->findAllType();
+        $article = $this->articleModel->findElementById($id);
+        $categories = $this->categorieModel->findAll();
+        $types = $this->typeModel->findAll();
         $this->renderView("articles/update.form", ['article' => $article, 'categories' => $categories, 'types' => $types]);
     }
 
     public function storeArticle(array $article): void {
-        $this->articleModel->saveArticle($article);
+        $this->articleModel->save($article);
     }
 
     public function getArticleById(int $id): ?array {
-        return $this->articleModel->findArticleById($id);
+        return $this->articleModel->findElementById($id);
     }
 
     public function removeArticle(int $id): void {
-        $this->articleModel->deleteArticle($id);
+        $this->articleModel->delete($id);
     }
 
     public function modifierArticle(int $id, array $article): void {
-        $this->articleModel->updateArticle($id, $article);
+        $this->articleModel->update($id, $article);
     }
 
     public function nbrArticle(): int {
-        return $this->articleModel->getNbrArticle();
+        return $this->articleModel->getNbrOfElement();
     }
 
     public function numberofpageArticle(): int {
@@ -101,5 +101,4 @@ class ArticleController extends Controller {
     }
 }
 
-// $articleController = new ArticleController();
 ?>
