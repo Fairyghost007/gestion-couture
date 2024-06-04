@@ -28,43 +28,37 @@ class Model
     }
 
     protected function executeSelect(string $sql, bool $fetch = false, int $debut = 0, int $nbElementByPage = 5)
-{
-    try {
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(1, $debut, PDO::PARAM_INT);
-        $stmt->bindValue(2, $nbElementByPage, PDO::PARAM_INT);
-        $stmt->execute();
+    {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(1, $debut, PDO::PARAM_INT);
+            $stmt->bindValue(2, $nbElementByPage, PDO::PARAM_INT);
+            $stmt->execute();
 
-        return $fetch ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-        return [];
-    }
-}
-
-protected function executeInsert(string $sql, array $data, array $bindings): bool
-{
-    try {
-        $stmt = $this->pdo->prepare($sql);
-        
-        foreach ($bindings as $param => $type) {
-            $stmt->bindValue($param, $data[substr($param, 1)], $type);
+            return $fetch ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return [];
         }
-
-        return $stmt->execute();
-    } catch (PDOException $e) {
-        echo "Connection failed: " . $e->getMessage();
-        return false;
     }
-}
 
+    protected function executeInsert(string $sql, array $data, array $bindings): bool
+    {
+        try {
+            $stmt = $this->pdo->prepare($sql);
 
+            foreach ($bindings as $param => $type) {
+                $stmt->bindValue($param, $data[substr($param, 1)], $type);
+            }
 
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            echo "Connection failed: " . $e->getMessage();
+            return false;
+        }
+    }
 
-
-
-
-    protected function executeSelectId(string $sql,int $id): ?array
+    protected function executeSelectId(string $sql, int $id): ?array
     {
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -78,7 +72,7 @@ protected function executeInsert(string $sql, array $data, array $bindings): boo
         }
     }
 
-    protected function executeDelete(string $sql,int $id): bool
+    protected function executeDelete(string $sql, int $id): bool
     {
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -95,21 +89,19 @@ protected function executeInsert(string $sql, array $data, array $bindings): boo
     {
         try {
             $stmt = $this->pdo->prepare($sql);
-            
+
             foreach ($bindings as $param => $type) {
                 $stmt->bindParam($param, $data[substr($param, 1)], $type); // Extracting key name from binding key
             }
-    
+
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    
+
             return $stmt->execute();
         } catch (PDOException $e) {
             error_log("Update failed: " . $e->getMessage());
             return false;
         }
     }
-    
-
 
     protected function executeSelectNbrOfElement(string $sql,): int
     {
@@ -123,5 +115,4 @@ protected function executeInsert(string $sql, array $data, array $bindings): boo
             return 0;
         }
     }
-
 }

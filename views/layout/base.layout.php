@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="../public/js/tailwind.confing.js"></script>
+    <script src="<?= WEBROOT ?>/js/tailwind.config.js"></script>
     <link rel="stylesheet" href="<?= WEBROOT ?>/css/list.css">
 </head>
 
