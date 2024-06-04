@@ -6,6 +6,7 @@ class TypeController extends Controller {
     private TypeModel $typeModel;
 
     public function __construct() {
+        parent::__construct();
         $this->typeModel = new TypeModel();
         $this->load();
     }

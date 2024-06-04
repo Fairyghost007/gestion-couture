@@ -6,7 +6,7 @@ class routeur
     {
         if (isset($_REQUEST['controller'])) {
             if ($_REQUEST['controller'] == "article") {
-                require_once("../controllers/article.controller.php");
+                require_once "../controllers/article.controller.php";
                 $articleController =new ArticleController();
             } elseif ($_REQUEST['controller'] == "type") {
                 require_once("../controllers/type.controller.php");

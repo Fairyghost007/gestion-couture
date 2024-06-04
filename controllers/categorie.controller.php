@@ -6,11 +6,13 @@ class CategorieController extends Controller {
     private CategorieModel $categorieModel;
 
     public function __construct() {
+        parent::__construct();
         $this->categorieModel = new CategorieModel();
         $this->load();
     }
 
     public function load(): void {
+        $this->layout="base";
         if (isset($_REQUEST['action'])) {
             if ($_REQUEST['action'] == "liste-categorie") {
                 unset($_REQUEST['action']);

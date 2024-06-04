@@ -10,10 +10,12 @@ class ArticleController extends Controller {
     private TypeModel $typeModel;
 
     public function __construct() {
+        parent::__construct();
         $this->articleModel = new ArticleModel();
         $this->categorieModel = new CategorieModel();
         $this->typeModel = new TypeModel();
         $this->load();
+        
     }
 
     public function load(): void {
@@ -32,18 +34,15 @@ class ArticleController extends Controller {
                 unset($_REQUEST['btnSave']);
                 $this->storeArticle($_REQUEST);
                 $this->redirectToRoute("controller=article&action=liste-article&page=1");
-                exit();
             } elseif ($_REQUEST['action'] == "delete") {
                 unset($_REQUEST['action']);
                 var_dump($_REQUEST['id']);
                 $this->removeArticle($_REQUEST['id']);
                 $this->redirectToRoute("controller=article&action=liste-article&page=1");
-                exit();
             } elseif ($_REQUEST['action'] == "update") {
                 unset($_REQUEST['action']);
                 var_dump($_REQUEST['id']);
                 $this->chargerFormulaireUpdateArticle($_REQUEST['id']);
-                exit();
             } elseif ($_REQUEST['action'] == "modifier") {
                 unset($_REQUEST['action']);
                 unset($_REQUEST['btnUpdateArticle']);
@@ -51,7 +50,6 @@ class ArticleController extends Controller {
                 var_dump($_REQUEST);
                 $this->modifierArticle($_REQUEST['id'], $_REQUEST);
                 $this->redirectToRoute("controller=article&action=liste-article&page=1");
-                exit();
             }
         } else {
             $this->listerArticle(0, 1);
@@ -59,8 +57,7 @@ class ArticleController extends Controller {
     }
 
     public function listerArticle($debut, $page): void {
-        $articles = $this->articleModel->findAll($debut, nbElementBypage);
-        $this->renderView("articles/liste", ['articles' => $articles, 'page' => $page]);
+        $this->renderView("articles/liste", ['articles' => $this->articleModel->findAll($debut, nbElementBypage), 'page' => $page]);
     }
 
     public function chargerFormulaireArticle(): void {
