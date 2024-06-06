@@ -7,6 +7,9 @@ class TypeController extends Controller {
 
     public function __construct() {
         parent::__construct();
+        if(!Autorisation::isConnect()){
+            $this->redirectToRoute("controller=security&action=show-form-connexion");
+        }
         $this->typeModel = new TypeModel();
         $this->load();
     }
@@ -19,14 +22,13 @@ class TypeController extends Controller {
                 $page = $_REQUEST['page'];
                 $debut = nbElementBypage * ($_REQUEST['page'] - 1);
                 $this->listerType($debut, $page);
-            } elseif ($_REQUEST['action'] == "form-type") {
-                $this->chargerFormulaireType();
             } elseif ($_REQUEST['action'] == "save-type") {
                 unset($_REQUEST['action']);
                 unset($_REQUEST['btnSaveType']);
-                array_pop($_REQUEST);
+                unset($_REQUEST['controller']);
+                // var_dump($_REQUEST);
                 $this->storeType($_REQUEST);
-                $this->redirectToRoute("controller=type&action=liste-type&page=1");
+                
                 exit();
             } elseif ($_REQUEST['action'] == "deleteType") {
                 unset($_REQUEST['action']);
@@ -57,17 +59,30 @@ class TypeController extends Controller {
         $this->renderView("type/liste", ['types' => $types, 'page' => $page]);
     }
 
-    public function chargerFormulaireType(): void {
-        $this->renderView("type/form");
-    }
-
     public function chargerFormulaireUpdateType(int $id): void {
         $type = $this->typeModel->findElementById($id);
         $this->renderView("type/update.form", ['type' => $type]);
     }
 
     public function storeType(array $type): void {
-        $this->typeModel->save($type);
+        Validator::isEmpty($type["nomType"],"nomType");
+        if (Validator::isValide()) {
+            $type=$this->typeModel->findByNameType($type["nomType"]);
+            // dd($type);
+            if ($type) {
+                Validator::addError("nomType","Ce nomType Existe deja");
+                Session::addSession("errors",Validator::$errors);
+            } else {
+                $this->typeModel->save($type);
+            }
+            
+            
+        } else {
+           Session::addSession("errors",Validator::$errors);
+        }
+        $this->redirectToRoute("controller=type&action=liste-type&page=1");
+        
+        
     }
 
     public function removeType(int $id): void {
@@ -87,5 +102,3 @@ class TypeController extends Controller {
     }
 }
 
-
-?>

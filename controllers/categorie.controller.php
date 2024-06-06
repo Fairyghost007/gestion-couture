@@ -7,6 +7,9 @@ class CategorieController extends Controller {
 
     public function __construct() {
         parent::__construct();
+        if(!Autorisation::isConnect()){
+            $this->redirectToRoute("controller=security&action=show-form-connexion");
+        }
         $this->categorieModel = new CategorieModel();
         $this->load();
     }
@@ -20,8 +23,6 @@ class CategorieController extends Controller {
                 $page = $_REQUEST['page'];
                 $debut = nbElementBypage * ($_REQUEST['page'] - 1);
                 $this->listerCategorie($debut, $page);
-            } elseif ($_REQUEST['action'] == "form-categorie") {
-                $this->chargerFormulaireCategorie();
             } elseif ($_REQUEST['action'] == "save-categorie") {
                 unset($_REQUEST['action']);
                 unset($_REQUEST['btnSaveCategorie']);
@@ -58,18 +59,27 @@ class CategorieController extends Controller {
         $this->renderView("categories/liste", ['categories' => $categories, 'page' => $page]);
     }
 
-    public function chargerFormulaireCategorie(): void {
-        $this->renderView("categories/form");
-    }
-
     public function chargerFormulaireUpdateCategorie(int $id): void {
         $categorie = $this->categorieModel->findElementById($id);
         $this->renderView("categories/update.form", ['categorie' => $categorie]);
     }
 
     public function storeCategorie(array $categorie): void {
-        $this->categorieModel->save($categorie);
+        Validator::isEmpty($categorie["nomCategorie"], "nomCategorie");
+        if (Validator::isValide()) {
+            $existingCategorie = $this->categorieModel->findByNameCategorie($categorie["nomCategorie"]);
+            if ($existingCategorie) {
+                Validator::addError("nomCategorie", "Ce nomCategorie Existe deja");
+                Session::addSession("errors", Validator::$errors);
+            } else {
+                $this->categorieModel->save($categorie);
+            }
+        } else {
+            Session::addSession("errors", Validator::$errors);
+        }
+        $this->redirectToRoute("controller=categorie&action=liste-categorie&page=1");
     }
+    
 
     public function removeCategorie(int $id): void {
         $this->categorieModel->delete($id);

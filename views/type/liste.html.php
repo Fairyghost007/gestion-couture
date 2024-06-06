@@ -1,15 +1,36 @@
 <?php
+$errors = [];
+if (Session::getSession("errors")) {
+    $errors = Session::getSession("errors");
+}
 require_once("../controllers/type.controller.php");
 $typeController = new TypeController();
+
 ?>
 <div class=" flex justify-between flex-col items-center    right-0 w-full-64 ml-64  h-auto gap-4 pt-20 ">
-    <div class="flex  content-between items-center flex-col  w-11/12 p-5 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex flex-row  justify-between items-center w-full  p-2  border-b mb-3 border-gray-500">
-            <div>
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Liste Type</h5>
+    <div class="flex  justify-between items-center flex-col  w-11/12 p-5 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex flex-row  justify-between items-center w-full  p-2  border-b mb-3 border-gray-500 ">
+            <div class=" w-1/5">
+                <h5 class=" text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Liste Type</h5>
             </div>
+            <form class=" flex justify-center flex-row  items-center gap-4 w-full mx-auto bg-gray-700 border border-gray-600  px-3 pt-2 rounded-lg" action="<?= WEBROOT ?>" method="post">
+                <div class="mb-5 w-full">
+                    <label for="nomType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">nomType</label>
+                    <input type="text" name="nomType" id="nomType" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?=add_class_invalid('nomType');?>" />
+                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                        <?= $errors["nomType"] ?? "" ?>
+                    </p>
+                </div>
 
-            <a href="<?= WEBROOT ?>/?controller=type&action=form-type" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nouveau</a>
+                <div>
+                    <input value="save-type" name="action" type="hidden">
+                    <input value="type" name="controller" type="hidden">
+                    <button type="submit" name="btnSaveType" class="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ADD</button>
+
+                </div>
+
+            </form>
+
         </div>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg  w-full">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -73,3 +94,5 @@ $typeController = new TypeController();
             </nav>
         </div>
     <?php endif; ?>
+
+<?php Session::removeSession("errors"); ?>

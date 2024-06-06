@@ -43,4 +43,8 @@ class TypeModel extends Model
     {
         return $this->executeSelectNbrOfElement("SELECT COUNT(id) as nbrElements FROM $this->table");
     }
+
+    public function findByNameType(string $nameType):array|false{
+        return $this->executeSelectBis("SELECT * FROM $this->table WHERE nomType like '$nameType'",true);
+    }
 }

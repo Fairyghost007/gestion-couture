@@ -42,7 +42,21 @@ class Model
         }
     }
 
-    protected function executeInsert(string $sql, array $data, array $bindings): bool
+    protected function executeSelectBis(string $sql, bool $fetch = false):array|false
+{
+    try {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+
+        return $fetch ? $stmt->fetch(PDO::FETCH_ASSOC) : $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "Connection failed: " . $e->getMessage();
+        return [];
+    }
+}
+
+
+    protected function executeInsert(string $sql, array $data, array $bindings=[]): bool
     {
         try {
             $stmt = $this->pdo->prepare($sql);
@@ -85,13 +99,13 @@ class Model
         }
     }
 
-    protected function executeUpdate(string $sql, int $id, array $data, array $bindings): bool
+    protected function executeUpdate(string $sql, int $id, array $data, array $bindings=[]): bool
     {
         try {
             $stmt = $this->pdo->prepare($sql);
 
             foreach ($bindings as $param => $type) {
-                $stmt->bindParam($param, $data[substr($param, 1)], $type); // Extracting key name from binding key
+                $stmt->bindParam($param, $data[substr($param, 1)], $type); 
             }
 
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);

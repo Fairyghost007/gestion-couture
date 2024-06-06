@@ -3,6 +3,7 @@ class Controller{
     protected string $layout;
     public function __construct()
     {
+        Session::openSession();
         $this->layout="base";
     }
     public function redirectToRoute(string $path){
