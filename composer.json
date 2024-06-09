@@ -1,0 +1,19 @@
+{
+    "name": "macpro/coutureobjetun",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "App\\Controllers\\": "src/controllers/",
+            "App\\Model\\": "src/model/",
+            "App\\Core\\": "src/core/",
+            "App\\API\\": "src/api/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Fairyghost007",
+            "email": "biranenini6762@gmail.com"
+        }
+    ],
+    "require": {}
+}

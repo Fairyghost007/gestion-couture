@@ -1,9 +1,12 @@
 <?php
+use App\Controllers\TypeController;
+use App\core\Session;
+
 $errors = [];
 if (Session::getSession("errors")) {
     $errors = Session::getSession("errors");
 }
-require_once("../controllers/type.controller.php");
+// require_once("../controllers/TypeController.php");
 $typeController = new TypeController();
 
 ?>
@@ -13,25 +16,24 @@ $typeController = new TypeController();
             <div class=" w-1/5">
                 <h5 class=" text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Liste Type</h5>
             </div>
-            <form class=" flex justify-center flex-row  items-center gap-4 w-full mx-auto bg-gray-700 border border-gray-600  px-3 pt-2 rounded-lg" action="<?= WEBROOT ?>" method="post">
-                <div class="mb-5 w-full">
-                    <label for="nomType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">nomType</label>
-                    <input type="text" name="nomType" id="nomType" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?=add_class_invalid('nomType');?>" />
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                        <?= $errors["nomType"] ?? "" ?>
-                    </p>
-                </div>
-
-                <div>
-                    <input value="save-type" name="action" type="hidden">
-                    <input value="type" name="controller" type="hidden">
-                    <button type="submit" name="btnSaveType" class="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ADD</button>
-
-                </div>
-
-            </form>
-
         </div>
+        <form class=" flex justify-center flex-row  items-center gap-4 w-full mx-auto  mb-2 bg-gray-700 border border-gray-600  px-3 pt-2 rounded-lg" action="<?= WEBROOT ?>" method="post">
+            <div class="mb-5 w-full">
+                <label for="nomType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">nomType</label>
+                <input type="text" name="nomType" id="nomType" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= \App\core\add_class_invalid('nomType'); ?>" />
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                    <?= $errors["nomType"] ?? "" ?>
+                </p>
+            </div>
+
+            <div>
+                <input value="save-type" name="action" type="hidden">
+                <input value="type" name="controller" type="hidden">
+                <button type="submit" name="btnSaveType" class="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ADD</button>
+
+            </div>
+
+        </form>
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg  w-full">
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -95,4 +97,5 @@ $typeController = new TypeController();
         </div>
     <?php endif; ?>
 
-<?php Session::removeSession("errors"); ?>
+    <?php Session::removeSession("errors"); ?>
+    <script src="<?= WEBROOT ?>/js/type.js"></script>

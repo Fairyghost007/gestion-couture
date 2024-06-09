@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="<?= WEBROOT ?>/css/list.css">
 </head>
 
-<body>
+<body class="">
 
     <?php
         require_once("../views/sidebar.html.php");

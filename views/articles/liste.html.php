@@ -1,5 +1,7 @@
 <?php
-require_once("../controllers/article.controller.php");
+
+// require_once("../controllers/ArticleController.php");
+use App\Controllers\ArticleController;
 $articleController = new ArticleController();
 ?>
 <div class=" flex justify-between flex-col items-center    right-0 w-full-64 ml-64  h-auto gap-4 pt-20 ">
@@ -91,3 +93,4 @@ $articleController = new ArticleController();
 
 
 </div>
+<script src="<?= WEBROOT ?>/js/article.js"></script>

@@ -1,4 +1,6 @@
 <?php
+use App\core\Session;
+
 $errors = [];
 if (Session::getSession("errors")) {
     $errors = Session::getSession("errors");
@@ -15,21 +17,21 @@ if (Session::getSession("errors")) {
         </div>
         <div class="mb-5">
             <label for="libelle" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Libelle</label>
-            <input type="libelle" name="libelle" id="libelle" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('libelle'); ?>"  />
+            <input type="libelle" name="libelle" id="libelle" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= \App\core\add_class_invalid('libelle'); ?>"  />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                 <?= $errors["libelle"] ?? "" ?>
             </p>
         </div>
         <div class="mb-5">
             <label for="qteStock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">QteStock</label>
-            <input type="qteStock" name="qteStock" id="qteStock" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('qteStock'); ?>"  />
+            <input type="qteStock" name="qteStock" id="qteStock" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= \App\core\add_class_invalid('qteStock'); ?>"  />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                 <?= $errors["qteStock"] ?? "" ?>
             </p>
         </div>
         <div class="mb-5">
             <label for="prixAppro" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">prixAppro</label>
-            <input type="int" name="prixAppro" id="prixAppro" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('prixAppro'); ?>"  />
+            <input type="int" name="prixAppro" id="prixAppro" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= \App\core\add_class_invalid('prixAppro'); ?>"  />
             <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                 <?= $errors["prixAppro"] ?? "" ?>
             </p>

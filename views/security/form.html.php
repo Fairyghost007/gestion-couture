@@ -1,56 +1,15 @@
 <?php
+use App\core\Session;
 $errors = [];
 if (Session::getSession("errors")) {
     $errors = Session::getSession("errors");
 }
 
 ?>
-<!-- <div class=" flex justify-center flex-col  items-center  ml-64  overflow-hidden  m-5 w-3/4  self-center h-auto pt-10">
-    <form class="w-3/4 mx-auto bg-gray-700 border border-gray-600  p-6 rounded-lg" action="<?= WEBROOT ?>" method="post">
-        <div class="flex flex-row  justify-between items-center w-full  border-b mb-2 border-gray-500">
-            <div>
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Form Connexion</h5>
-            </div>
-            <hr>
-        </div>
-        <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 <?= add_class_hidden('error_connexion'); ?>" role="alert">
-            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div class="ms-3 text-sm font-medium">
-                <?= $errors["error_connexion"] ?? "" ?>
-            </div>
-        </div>
-        <div class="mb-5">
-            <label for="login" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">login</label>
-            <input type="text" name="login" id="login" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('login'); ?>" />
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                <?= $errors["login"] ?? "" ?>
-            </p>
-        </div>
-        <div class="mb-5">
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">password</label>
-            <input type="password" name="password" id="password" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('password'); ?>" />
-            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
-                <?= $errors["password"] ?? "" ?>
-            </p>
-        </div>
-
-        <div>
-            <input value="connexion" name="action" type="hidden">
-            <input value="security" name="controller" type="hidden">
-            <button type="submit" name="btnConnexion" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Connexion</button>
-
-        </div>
-
-    </form>
-</div> -->
-
 <div class="bg-white dark:bg-gray-300 min-h-screen flex items-center">
-    <div class="container px-6 py-36 mx-auto  bg-gray-50 dark:bg-gray-800 border border-gray-600  p-6 rounded-lg">
+    <div class="container px-40 py-36 mx-auto  bg-gray-50 dark:bg-gray-800 border border-gray-600  p-6 rounded-lg">
         <div class="lg:flex">
-            <div class="lg:w-1/2">
+            <div class="lg:w-1/2  mt-7">
                 <svg class="  w-auto  h-14  rounded-lg" width="auto" height="auto" viewBox="0 0 3762 1050" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect width="3762" height="1050" fill="#4B5563" />
                     <path d="M887 396.491L854.247 421.619C836.176 398.077 814.475 380.282 789.162 368.123C763.84 355.99 736.036 349.923 705.731 349.923C672.598 349.923 641.922 357.886 613.695 373.767C585.468 389.675 563.569 411.029 548.05 437.837C532.514 464.637 524.746 494.789 524.746 528.284C524.746 578.885 542.119 621.109 576.855 654.992C611.574 688.833 655.389 705.774 708.266 705.774C766.453 705.774 815.096 683.007 854.247 637.482L887 662.317C866.3 688.66 840.452 709.023 809.492 723.422C778.54 737.805 743.959 745 705.731 745C633.068 745 575.777 720.846 533.799 672.468C498.588 631.657 481 582.375 481 524.622C481 463.844 502.295 412.709 544.938 371.234C587.58 329.759 640.974 309 705.179 309C743.959 309 778.963 316.678 810.19 332.008C841.443 347.338 867.05 368.83 887 396.491Z" fill="white" />
@@ -63,16 +22,27 @@ if (Session::getSession("errors")) {
                     <path d="M1501 309H1581.68V551.05C1581.68 604.83 1611.64 632.855 1662.94 632.855C1714.79 632.855 1744.75 604.83 1744.75 551.05V309H1826V550.486C1826 653.585 1749.94 704 1661.78 704C1573.6 704 1501 653.585 1501 550.486V309Z" fill="white" />
                     <path d="M2255 309H2335.68V551.05C2335.68 604.83 2365.64 632.855 2416.94 632.855C2468.79 632.855 2498.75 604.83 2498.75 551.05V309H2580V550.486C2580 653.585 2503.94 704 2415.78 704C2327.6 704 2255 653.585 2255 550.486V309Z" fill="white" />
                 </svg>
-
-                <h1 class="mt-4 text-gray-600 dark:text-gray-300 md:text-lg">Welcome back</h1>
-
                 <h1 class="mt-4 text-2xl font-medium text-gray-800 capitalize lg:text-3xl dark:text-white">
-                    login to your account
+                    Bienvenue
                 </h1>
+
+                <h1 class="mt-4 text-gray-600 dark:text-gray-300 md:text-lg">Connectez-vous à votre compte</h1>
+
+
             </div>
 
             <div class="mt-8 lg:w-1/2 lg:mt-0">
+
                 <form class="w-full lg:max-w-xl" action="<?= WEBROOT ?>" method="post">
+                    <div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-gray-700  border border-gray-600 dark:text-red-400 <?= \App\core\add_class_hidden('error_connexion'); ?>" role="alert">
+                        <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+                        </svg>
+                        <span class="sr-only">Info</span>
+                        <div class="ms-3 text-sm font-medium">
+                            <?= $errors["error_connexion"] ?? "" ?>
+                        </div>
+                    </div>
                     <div class="mb-5">
                         <label for="login" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">login</label>
                         <div class="relative flex items-center">
@@ -82,7 +52,7 @@ if (Session::getSession("errors")) {
                                 </svg>
                             </span>
 
-                            <input type="text"  name="login" id="login" class="bg-gray-700 py-3  px-11 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('login'); ?>">
+                            <input type="text" name="login" id="login" class="bg-gray-700 py-3  px-11 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= \App\core\add_class_invalid('login'); ?>">
                         </div>
                         <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                             <?= $errors["login"] ?? "" ?>
@@ -96,7 +66,7 @@ if (Session::getSession("errors")) {
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                 </svg>
                             </span>
-                            <input type="password" name="password" id="password" class="  py-3  px-11 bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= add_class_invalid('password'); ?>">
+                            <input type="password" name="password" id="password" class="  py-3  px-11 bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-900 dark:text-gray-900 dark:focus:ring-blue-500 dark:focus:border-blue-500 <?= \App\core\add_class_invalid('password'); ?>">
                         </div>
                         <p class="mt-2 text-sm text-red-600 dark:text-red-500">
                             <?= $errors["password"] ?? "" ?>
